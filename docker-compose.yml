@@ -21,6 +21,14 @@ services:
       TZ: "Asia/Tokyo"
     ports:
       - "3306:3306"
+  swagger-ui_depot:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./doc/:/doc
+    environment:
+      SWAGGER_JSON: /doc/openapi.yaml
 volumes:
   bundle-volume:
   mysql-volume:
