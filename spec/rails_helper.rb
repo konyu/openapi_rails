@@ -40,6 +40,15 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.include(Committee::Rails::Test::Methods)
+  config.add_setting(:committee_options)
+  config.committee_options = {
+    schema_path: Rails.root.join('doc/openapi.yaml').to_s,
+    query_hash_key: 'rack.request.query_hash',
+    old_assert_behavior: false,
+    parse_response_by_content_type: true
+  }
+
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 
