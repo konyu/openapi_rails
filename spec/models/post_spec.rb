@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe Post, type: :model do
   describe '#sample' do
+    before do
+      @post = Post.create!(name: 'foo bar')
+    end
     it 'first test' do
-      debugger # VSCodeのデバッガでは止まらない
-      expect(Post.new.sample).to eq('SAMPLE') # VSCodeのブレークポイントで止まる
-      binding.b # VSCodeのデバッガでも止まる
+      expect(Post.all.first.name).to eq('foo bar')
     end
   end
 end

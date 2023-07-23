@@ -14,16 +14,17 @@ paths:
       summary: get posts
       description: Returns all posts
       responses:
-        '200':
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
-        '404':
+                  $ref: "#/components/schemas/Post"
+        "404":
           description: Post not found
+  /api/v2/posts: {}
 components:
   schemas:
     Post:
@@ -47,4 +48,3 @@ components:
         - name
         - created_at
         - updated_at
-

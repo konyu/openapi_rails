@@ -1,0 +1,45 @@
+name: CI
+on: [pull_request]
+jobs:
+  nextjs-repo-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build and test next.js repo
+        uses: convictional/trigger-workflow-and-wait@v1.6.5
+        with:
+          owner: konyu
+          repo: openapi_next
+          github_token: ${{ secrets.OPENAPI_NEXT_TOKEN }}
+          workflow_file_name: trigger.yml
+          propagate_failure: true
+  rspec:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        env:
+          TZ: "Asia/Tokyo"
+          MYSQL_ROOT_PASSWORD: password
+        options: --health-cmd="mysqladmin ping -pmysql" --health-interval=5s --health-timeout=2s --health-retries=3
+    env:
+      SECRET_KEY_BASE: secret_key_base_for_test
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2.1'
+          bundler-cache: true
+      - name: apt-get
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmysqlclient-dev
+      - name: setup db schema
+        run: |
+          cp config/database.ci.yml config/database.yml
+          bundle exec rails db:setup
+      - name: Run RSpec
+        run: bundle exec rspec
